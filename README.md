@@ -70,3 +70,10 @@
         ```bash
         python3 fancontroller.py
         ```
+       
+
+## 感谢项目
+
+[perryclements/r410-fancontroller: Python fan controller for Dell R410 server (github.com)](https://github.com/perryclements/r410-fancontroller)
+
+[ipmitool/ipmitool: An open-source tool for controlling IPMI-enabled systems (github.com)](https://github.com/ipmitool/ipmitool)
