@@ -22,13 +22,14 @@
 3. 编辑fan\_settings.json配置文件，其含义如下，需要自己配置ip地址和风扇转速
 
     > 注意只能用ip地址，不能用域名
-    > 注意，添加或删除服务配置的时候，要注意`{}`不要带多余的逗号，否则会报错`json.decoder.JSONDecodeError:` 
-
+    >
+    > 注意，添加或删除服务配置的时候，要注意{}不要带多余的逗号，否则会报错json.decoder.JSONDecodeError
+    >
 
     ```
     {
           "interval": 60,  // 温度检查和风扇速度调整的时间间隔，以秒为单位
-          "windows_ipmi_tool_path": "ipmitool.exe", //ipmitool地址，本项目自带tpmitool.exe，可以不用改，linux环境不用管
+          "windows_ipmi_tool_path": "ipmitool.exe", //ipmitool地址，本项目自带tpmitool.exe，可以不用改，linux也不用改
           "servers": [
             {
               "ip": "192.168.xx.xx",  // 服务器的IP地址
@@ -64,10 +65,10 @@
 
     1. windows环境直接在命令行输入以下命令即可运行
 
-        ` python fancontroller.py `
+        `bash python fancontroller.py `
     2. linux环境直接在命令行输入以下命令即可运行
 
-        ` python3 fancontroller.py `
+        `bash python3 fancontroller.py `
 
 ## 感谢项目
 
