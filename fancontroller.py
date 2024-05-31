@@ -35,7 +35,6 @@ def ipmicmd(cmdIn, ipmi_tool_path):
         command = f'"{ipmi_tool_path}" {cmdIn}'
     else:
         command = f'ipmitool {cmdIn}'
-    print(command)
     output = subprocess.run(command, shell=True, capture_output=True, text=True)
     return sendcommand(command)
 
