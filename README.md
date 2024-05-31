@@ -15,10 +15,14 @@
 
 1. clone 本项目
 
-    `bash git clone https://github.com/dongyu6/python-ipmitool.git `
+    ```
+    git clone https://github.com/dongyu6/python-ipmitool.git
+    ```
 2. 进入本项目路径
 
-    `bash cd python-ipmitool `
+    ```
+    cd python-ipmitool
+    ```
 3. 编辑fan\_settings.json配置文件，其含义如下，需要自己配置ip地址和风扇转速
 
     > 注意只能用ip地址，不能用域名
@@ -65,10 +69,14 @@
 
     1. windows环境直接在命令行输入以下命令即可运行
 
-        `bash python fancontroller.py `
+        ```
+        bash python fancontroller.py
+        ```
     2. linux环境直接在命令行输入以下命令即可运行
 
-        `bash python3 fancontroller.py `
+        ```
+        bash python3 fancontroller.py 
+        ```
 
 ## 感谢项目
 
