@@ -35,9 +35,9 @@ def ipmicmd(cmdIn, ipmi_tool_path):
         command = f'"{ipmi_tool_path}" {cmdIn}'
     else:
         command = f'ipmitool {cmdIn}'
-
+    print(command)
     output = subprocess.run(command, shell=True, capture_output=True, text=True)
-    return output.stdout
+    return sendcommand(command)
 
 # 设置风扇转速
 def set_fan_speed(ip, user, password, fan_index, percentage, ipmi_tool_path):
