@@ -1,0 +1,34 @@
+{
+  "interval": 60,
+  "windows_ipmi_tool_path": "C:\\software\\ipmi\\ipmitool.exe",
+  "servers": [
+    {
+      "ip": "192.168.xx.xx",
+      "user": "root",
+      "password": "xxx"
+    },
+    {
+      "ip": "192.168.xx.xxx",
+      "user": "root",
+      "password": "xxx"
+    },
+    {
+      "ip": "192.168.xxx.xxx",
+      "user": "root",
+      "password": "xxx"
+    }
+ ]
+  ,
+  "temperature_ranges": [
+    {
+      "min_temp": 0,
+      "max_temp": 60,
+      "fan_speeds": [20, 20, 20, 20, 20, 20]
+    },
+    {
+      "min_temp": 61,
+      "max_temp": 80,
+      "fan_speeds": [25, 25, 25, 25, 25, 25]
+    }
+  ]
+}
