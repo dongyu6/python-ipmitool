@@ -29,7 +29,7 @@
     ```
     {
           "interval": 60,  // 温度检查和风扇速度调整的时间间隔，以秒为单位
-          "windows_ipmi_tool_path": "ipmitool.exe", //ipmitool地址，本项目自带tpmitool.exe，可以不用改，linux也不用改
+          "windows_ipmi_tool_path": ".\\ipmitool\\ipmitool.exe", //ipmitool地址，本项目自带tpmitool.exe，可以不用改，linux也不用改
           "servers": [
             {
               "ip": "192.168.xx.xx",  // 服务器的IP地址
