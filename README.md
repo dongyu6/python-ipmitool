@@ -6,10 +6,10 @@
 
 经过了本人实践可以正常使用的型号如下，更多型号等待测试，欢迎参与维护！
 
-|  品牌  |  型号   | 是否兼容 |
-|:----:|:-----:|:----:|
-| Dell | 730XD |  Y   |
-| Dell |  730  |  Y   |
+|  品牌  |  型号   | 是否兼容 | type类型  |
+|:----:|:-----:|:----:|:-------:|
+| Dell | 730XD |  Y   | dell730 |
+| Dell |  730  |  Y   | dell730 |
 
 ## 使用方式
 
@@ -23,7 +23,7 @@
     ```
     cd python-ipmitool
     ```
-3. 编辑fan\_settings.json配置文件，其含义如下，需要自己配置ip地址和风扇转速
+3. 编辑`fan_settings.json`配置文件，其含义如下，需要自己配置ip地址和风扇转速
 
     > 注意只能用ip地址，不能用域名
     >
@@ -32,50 +32,78 @@
 
     ```
     {
-          "interval": 60,  // 温度检查和风扇速度调整的时间间隔，以秒为单位
-          "windows_ipmi_tool_path": ".\\ipmitool\\ipmitool.exe", //ipmitool地址，本项目自带tpmitool.exe，可以不用改，linux也不用改
-          "servers": [
+      "interval": 60,  // 控制风扇转速的时间间隔，单位为秒
+      "windows_ipmi_tool_path": ".\\ipmitool\\ipmitool.exe",  // Windows 系统下 ipmitool 工具的路径
+      "servers": [  // 服务器列表
+        {
+          "type": "dell730",  // 服务器类型
+          "ip": "192.168.71.90",  // 服务器 IP 地址
+          "user": "root",  // IPMI 用户名
+          "password": "123123",  // IPMI 密码
+          "temperature_ranges": [  // 温度范围与对应的风扇转速
             {
-              "ip": "192.168.xx.xx",  // 服务器的IP地址
-              "user": "root",  // 服务器的用户名
-              "password": "xxx"  // 服务器的密码
+              "min_temp": 0,  // 区间最低温度（包括）
+              "max_temp": 60,  // 区间最高温度（不包括）
+              "fan_speeds": [20,20,20,20,20,20]  // 对应风扇转速的列表，每个元素表示一个风扇的转速，单位为百分比
             },
             {
-              "ip": "192.168.xx.xxx",  // 第二台服务器的IP地址
-              "user": "root",  // 第二台服务器的用户名
-              "password": "xxx"  // 第二台服务器的密码
-            },
-            {
-              "ip": "192.168.xxx.xxx",  // 第三台服务器的IP地址
-              "user": "root",  // 第三台服务器的用户名
-              "password": "xxx"  // 第三台服务器的密码
+              "min_temp": 61,  // 区间最低温度（包括）
+              "max_temp": 80,  // 区间最高温度（不包括）
+              "fan_speeds": [25,25,25,25,25,25]  // 对应风扇转速的列表，每个元素表示一个风扇的转速，单位为百分比
             }
-          ],
+          ]
+        },
+        {
+          "type": "dell730",
+          "ip": "192.168.71.91",
+          "user": "root",
+          "password": "123123",
           "temperature_ranges": [
             {
-              "min_temp": 0,  // 最低温度（包括）
-              "max_temp": 60,  // 最高温度（不包括）
-              "fan_speeds": [20, 20, 20, 20, 20, 20]  // 在此温度区间内的风扇速度百分比，分别对应6个风扇
+              "min_temp": 0,
+              "max_temp": 60,
+              "fan_speeds": [20,20,20,20,20,20]
             },
             {
-              "min_temp": 61,  // 最低温度（包括）
-              "max_temp": 80,  // 最高温度（不包括）
-              "fan_speeds": [25, 25, 25, 25, 25, 25]  // 在此温度区间内的风扇速度百分比
+              "min_temp": 61,
+              "max_temp": 80,
+              "fan_speeds": [25,25,25,25,25,25]
+            }
+          ]
+        },
+        {
+          "type": "dell730",
+          "ip": "192.168.71.92",
+          "user": "root",
+          "password": "123123",
+          "temperature_ranges": [
+            {
+              "min_temp": 0,
+              "max_temp": 60,
+              "fan_speeds": [20,20,20,20,20,20]
+            },
+            {
+              "min_temp": 61,
+              "max_temp": 80,
+              "fan_speeds": [25,25,25,25,25,25]
             }
           ]
         }
+      ]
+    }
+
     ```
 4. 启动项目
 
     1. windows环境直接在命令行输入以下命令即可运行
 
         ```
-        bash python fancontroller.py
+        python fancontroller.py
         ```
     2. linux环境直接在命令行输入以下命令即可运行
 
         ```
-        bash python3 fancontroller.py 
+        python3 fancontroller.py 
         ```
 
 ## 感谢项目
