@@ -7,7 +7,10 @@ from fanController.dell730_controller import Dell730FanController
 def main():
     # 从配置文件中读取数据
     with open('fan_settings.json', 'r') as file:
-        data = json.load(file)
+        try:
+            data = json.load(file)
+        except json.JSONDecodeError:
+            input("错误：文件内容不是有效的JSON格式，请检查配置后重新打开，输入任意键退出程序：")
 
     servers = data['servers']
     windows_ipmi_tool_path = data['windows_ipmi_tool_path']
