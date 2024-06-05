@@ -15,6 +15,11 @@
 
 ## 使用方式
 
+> linux需要安装好`ipmitool`
+> 
+> debain系列使用`apt install -y ipmitool`安装，redhat系列使用`yum install -y ipmitool`安装
+> 
+
 1. clone 本项目
 
     ```
