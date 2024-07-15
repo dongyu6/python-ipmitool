@@ -1,16 +1,23 @@
 import json
 import threading
+import os
 
 from fanController.dell730_controller import Dell730FanController
 
 
 def main():
+    # 获取当前脚本所在目录
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    # 构建配置文件路径
+    config_file_path = os.path.join(current_directory, 'fan_settings.json')
+
     # 从配置文件中读取数据
-    with open('fan_settings.json', 'r') as file:
+    with open(config_file_path, 'r') as file:
         try:
             data = json.load(file)
         except json.JSONDecodeError:
             input("错误：文件内容不是有效的JSON格式，请检查配置后重新打开，输入任意键退出程序：")
+            return
 
     servers = data['servers']
     windows_ipmi_tool_path = data['windows_ipmi_tool_path']
