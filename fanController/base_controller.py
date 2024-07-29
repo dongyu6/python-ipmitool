@@ -1,10 +1,11 @@
+import os
 import subprocess
 from datetime import datetime
 import time
 import platform
 
 class IPMIFanController:
-    def __init__(self, servers, interval, windows_ipmi_tool_path):
+    def __init__(self, servers, interval, windows_ipmi_tool_path,log_file_path):
         """
         初始化 IPMI 风扇控制器。
 
@@ -12,6 +13,7 @@ class IPMIFanController:
             servers (dict): 包含服务器信息的字典。
             interval (int): 检查 CPU 温度的时间间隔（秒）。
             windows_ipmi_tool_path (str): Windows 平台上 IPMI 工具的路径。
+            log_file_path (str):  日志文件路径。
 
         Attributes:
             platform_system (str): 操作系统平台。
@@ -26,6 +28,7 @@ class IPMIFanController:
             self.ipmi_tool_path = 'ipmitool'
         self.interval = interval
         self.servers = servers
+        self.log_file_path=log_file_path
 
     def send_command(self, cmd_in):
         """
@@ -84,6 +87,21 @@ class IPMIFanController:
         """
         raise NotImplementedError("Method get_cpu_temperature must be implemented by subclasses")
 
+    def log_to_file(self, message):
+        """
+        将日志信息写入日志文件。
+
+        Args:
+            message (str): 要写入日志文件的信息。
+        """
+        if not os.path.exists(self.log_file_path):
+            with open(self.log_file_path, 'w', encoding='utf-8') as log_file:
+                log_file.write("日志开始\n")
+
+        with open(self.log_file_path, 'a', encoding='utf-8') as log_file:
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            log_file.write(f"[{current_time}] {message}\n")
+
     def set_ipmi_manual_mode(self, ip, user, password):
         """
         设置 IPMI 为手动模式。
@@ -118,7 +136,9 @@ class IPMIFanController:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if cpu_temps:
                 avg_temp = sum(cpu_temps) / len(cpu_temps)
-                print(f"[{current_time}] 服务器 {ip}：CPU 平均温度：{avg_temp} °C")
+                log_message = f"服务器 {ip}：CPU 平均温度：{avg_temp} °C"
+                self.log_to_file(log_message)
+                print(f"[{current_time}] {log_message}")
 
                 for temp_range in self.servers['temperature_ranges']:
                     min_temp = temp_range['min_temp']
@@ -127,11 +147,14 @@ class IPMIFanController:
 
                     if min_temp <= avg_temp < max_temp:
                         if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds):
-                            print(f"[{current_time}] 温度在之前的范围内，跳过设置")
+                            log_message = "温度在之前的范围内，跳过设置"
+                            self.log_to_file(log_message)
+                            print(f"[{current_time}] {log_message}")
                             break
 
-                        print(f"[{current_time}] 服务器 {ip}：温度范围：{min_temp}-{max_temp} °C")
-                        print(f"[{current_time}] 服务器 {ip}：设置风扇转速为 {fan_speeds}")
+                        log_message = f"设置风扇转速为 {fan_speeds}"
+                        self.log_to_file(log_message)
+                        print(f"[{current_time}] {log_message}")
                         for fan_index, speed in enumerate(fan_speeds):
                             self.set_fan_speed(ip, user, password, fan_index, speed)
                             time.sleep(1)
@@ -140,6 +163,8 @@ class IPMIFanController:
                         prev_fan_speeds = fan_speeds
                         break
             else:
-                print(f"[{current_time}] 服务器 {ip}：没有 CPU 温度数据可用。")
+                log_message = f"服务器 {ip}：没有 CPU 温度数据可用。"
+                self.log_to_file(log_message)
+                print(f"[{current_time}] {log_message}")
 
             time.sleep(self.interval)
