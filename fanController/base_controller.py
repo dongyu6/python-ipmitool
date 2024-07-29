@@ -84,6 +84,21 @@ class IPMIFanController:
         """
         raise NotImplementedError("Method get_cpu_temperature must be implemented by subclasses")
 
+    def set_ipmi_manual_mode(self, ip, user, password):
+        """
+        设置 IPMI 为手动模式。
+
+        Args:
+            ip (str): 服务器的 IP 地址。
+            user (str): IPMI 认证的用户名。
+            password (str): IPMI 认证的密码。
+
+        Returns:
+            str: IPMI 命令的输出。
+        """
+        command = f'-I lanplus -H {ip} -U {user} -P {password} raw 0x30 0x30 0x01 0x00'
+        return self.ipmi_command(command)
+
     def process_server(self):
         """
         处理服务器，监测 CPU 温度并相应调整风扇转速。
@@ -91,6 +106,9 @@ class IPMIFanController:
         ip = self.servers['ip']
         user = self.servers['user']
         password = self.servers['password']
+
+        # 设置 IPMI 为手动模式
+        self.set_ipmi_manual_mode(ip, user, password)
 
         prev_temp_ranges = None
         prev_fan_speeds = None
