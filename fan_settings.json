@@ -4,7 +4,7 @@
   "servers": [
     {
       "type": "dell730",
-      "ip": "192.168.71.93",
+      "ip": "192.168.71.90",
       "user": "root",
       "password": "123123",
       "temperature_ranges": [
