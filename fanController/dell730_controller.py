@@ -58,7 +58,7 @@ class Dell730FanController(IPMIFanController):
         command = f"-I lanplus -H {ip} -U {user} -P {password} sdr type fan"
         output = self.ipmi_command(command)
 
-        rpm_values = re.findall(r'(\d{4})\sRPM', output)
+        rpm_values = re.findall(r'\|\s(\d+)\sRPM', output)
         rpm_values = [int(rpm) for rpm in rpm_values]
 
         return rpm_values
