@@ -160,8 +160,8 @@ class IPMIFanController:
                     max_temp = temp_range['max_temp']
                     fan_speeds = temp_range['fan_speeds']
 
-                    if min_temp <= avg_temp < max_temp or avg_speed>15000:
-                        if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds):
+                    if min_temp <= avg_temp < max_temp :
+                        if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds) and avg_speed<15000:
                             log_message = "温度在之前的范围内，跳过设置"
                             self.log_to_file(log_message)
                             print(f"[{current_time}] {log_message}")
