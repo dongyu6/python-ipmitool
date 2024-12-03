@@ -3,6 +3,7 @@ from .base_controller import IPMIFanController  # 导入基础控制器类
 
 class Dell730FanController(IPMIFanController):
     """Dell730 服务器风扇控制器类，继承自基础控制器类 IPMIFanController。"""
+    max_fan_rotational_speed=16000
 
     def set_fan_speed(self, ip, user, password, fan_index, percentage):
         """设置 Dell 730 服务器风扇转速的方法。
@@ -42,6 +43,25 @@ class Dell730FanController(IPMIFanController):
                         temp = int(temp_match.group(1))
                         temp_list.append(temp)
         return temp_list
+
+    def get_fan_rotational_speed(self, ip, user, password):
+        """获取 Dell 730 服务器 风扇转速 的方法。
+
+        Args:
+            ip (str): 服务器 IP 地址。
+            user (str): IPMI 用户名。
+            password (str): IPMI 密码。
+
+        Returns:
+            list: 包含 风扇转速 的列表。
+        """
+        command = f"-I lanplus -H {ip} -U {user} -P {password} sdr type fan"
+        output = self.ipmi_command(command)
+
+        rpm_values = re.findall(r'(\d{4})\sRPM', output)
+        rpm_values = [int(rpm) for rpm in rpm_values]
+
+        return rpm_values
 
     def start_fan_control(self):
         """启动风扇控制的方法。"""

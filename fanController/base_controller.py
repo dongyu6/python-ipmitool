@@ -117,6 +117,19 @@ class IPMIFanController:
         command = f'-I lanplus -H {ip} -U {user} -P {password} raw 0x30 0x30 0x01 0x00'
         return self.ipmi_command(command)
 
+    def get_fan_rotational_speed(self, ip, user, password):
+        """获取 Dell 730 服务器 风扇转速 的方法。
+
+        Args:
+            ip (str): 服务器 IP 地址。
+            user (str): IPMI 用户名。
+            password (str): IPMI 密码。
+
+        Returns:
+            list: 包含 风扇转速 的列表。
+        """
+        raise NotImplementedError("Method get_cpu_temperature must be implemented by subclasses")
+
     def process_server(self):
         """
         处理服务器，监测 CPU 温度并相应调整风扇转速。
@@ -133,10 +146,12 @@ class IPMIFanController:
 
         while True:
             cpu_temps = self.get_cpu_temperature(ip, user, password)
+            fan_speeds=self.get_fan_rotational_speed(ip,user,password)
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if cpu_temps:
                 avg_temp = sum(cpu_temps) / len(cpu_temps)
-                log_message = f"服务器 {ip}：CPU 平均温度：{avg_temp} °C"
+                avg_speed=sum(fan_speeds) / len(fan_speeds)
+                log_message = f"服务器 {ip}：CPU 平均温度：{avg_temp}°C, 风扇平均转速{avg_speed}"
                 self.log_to_file(log_message)
                 print(f"[{current_time}] {log_message}")
 
@@ -145,7 +160,7 @@ class IPMIFanController:
                     max_temp = temp_range['max_temp']
                     fan_speeds = temp_range['fan_speeds']
 
-                    if min_temp <= avg_temp < max_temp:
+                    if min_temp <= avg_temp < max_temp or avg_speed>15000:
                         if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds):
                             log_message = "温度在之前的范围内，跳过设置"
                             self.log_to_file(log_message)
