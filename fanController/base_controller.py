@@ -150,8 +150,8 @@ class IPMIFanController:
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if cpu_temps:
                 avg_temp = sum(cpu_temps) / len(cpu_temps)
-                avg_speed=sum(fan_speeds) / len(fan_speeds)
-                log_message = f"服务器 {ip}：CPU 平均温度：{avg_temp}°C, 风扇平均转速{avg_speed}"
+                max_speed = max(fan_speeds)
+                log_message = f"服务器 {ip}：CPU 平均温度：{avg_temp}°C, 风扇最大转速{max_speed}"
                 self.log_to_file(log_message)
                 print(f"[{current_time}] {log_message}")
 
@@ -161,7 +161,7 @@ class IPMIFanController:
                     fan_speeds = temp_range['fan_speeds']
 
                     if min_temp <= avg_temp < max_temp :
-                        if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds) and avg_speed<15000:
+                        if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds) and max_speed<15000:
                             log_message = "温度在之前的范围内，跳过设置"
                             self.log_to_file(log_message)
                             print(f"[{current_time}] {log_message}")
