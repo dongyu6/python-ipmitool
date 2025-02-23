@@ -1,10 +1,8 @@
 import platform
 import subprocess
 import time
+import logging
 from datetime import datetime
-
-from loguru import logger  # 引入 loguru 模块
-
 
 class IPMIFanController:
     def __init__(self, servers, interval, windows_ipmi_tool_path, log_file_path, auto=True):
@@ -30,7 +28,14 @@ class IPMIFanController:
         self.user = self.servers['user']
         self.password = self.servers['password']
         self.auto = auto
-        logger.add(self.log_file_path, format="{time:YYYY-MM-DD HH:mm:ss} {message}", level="INFO", encoding="utf-8")  # 配置 loguru
+        # 配置 logging
+        logging.basicConfig(
+            filename=self.log_file_path,
+            format='%(asctime)s %(message)s',
+            level=logging.INFO,
+            encoding='utf-8'
+        )
+        self.logger = logging.getLogger(__name__)
 
     def send_command(self, cmd_in):
         """
@@ -127,7 +132,7 @@ class IPMIFanController:
                 avg_temp = max(cpu_temps)
                 max_speed = max(fan_speeds)
                 log_message = f"服务器 {self.ip}：CPU 平均温度：{avg_temp}°C, 风扇最大转速{max_speed}"
-                logger.info(log_message)  # 使用 loguru 记录日志
+                self.logger.info(log_message)  # 使用 logging 记录日志
 
                 for temp_range in self.servers['temperature_ranges']:
                     min_temp = temp_range['min_temp']
@@ -137,11 +142,11 @@ class IPMIFanController:
                     if min_temp <= avg_temp < max_temp:
                         if (prev_temp_ranges == (min_temp, max_temp)) and (prev_fan_speeds == fan_speeds) and max_speed < 15000:
                             log_message = "温度在之前的范围内，跳过设置"
-                            logger.info(log_message)  # 使用 loguru 记录日志
+                            self.logger.info(log_message)  # 使用 logging 记录日志
                             break
 
                         log_message = f"设置风扇转速为 {fan_speeds}"
-                        logger.info(log_message)  # 使用 loguru 记录日志
+                        self.logger.info(log_message)  # 使用 logging 记录日志
                         for fan_index, speed in enumerate(fan_speeds):
                             self.set_fan_speed(fan_index, speed)
                             time.sleep(1)
@@ -151,7 +156,7 @@ class IPMIFanController:
                         break
             else:
                 log_message = f"服务器 {self.ip}：没有 CPU 温度数据可用。"
-                logger.info(log_message)  # 使用 loguru 记录日志
+                self.logger.info(log_message)  # 使用 logging 记录日志
 
             if not self.auto:
                 break

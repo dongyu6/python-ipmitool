@@ -1,4 +1,5 @@
 import re
+import logging
 
 from .base_controller import IPMIFanController  # 导入基础控制器类
 
