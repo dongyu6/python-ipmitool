@@ -30,7 +30,7 @@ class IPMIFanController:
         self.auto = auto
         # 配置 logging
         logging.basicConfig(
-            filename=self.log_file_path,
+            filename=self.log_file_path,  # 指定日志文件路径
             format='%(asctime)s %(message)s',
             level=logging.INFO,
             encoding='utf-8'
