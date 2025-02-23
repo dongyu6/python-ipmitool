@@ -1,4 +1,5 @@
 {
+  "auto": true,
   "interval": 60,
   "windows_ipmi_tool_path": ".\\ipmitool\\ipmitool.exe",
   "servers": [
