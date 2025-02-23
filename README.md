@@ -39,6 +39,7 @@
 
     ```
     {
+      "auto": true, // 是否自动控制风扇转速，true为自动控制，false为手动控制
       "interval": 60,  // 控制风扇转速的时间间隔，单位为秒
       "windows_ipmi_tool_path": ".\\ipmitool\\ipmitool.exe",  // Windows 系统下 ipmitool 工具的路径
       "servers": [  // 服务器列表
@@ -112,6 +113,12 @@
         ```
         python3 fancontroller.py 
         ```
+       
+## 贡献与反馈
+欢迎提交 Issue 和 Pull Request 来帮助改进项目。如有任何问题或建议，请通过 GitHub Issues 反馈。
+
+## 许可证
+本项目采用 MIT 许可证，详情请参阅 LICENSE 文件。
 
 ## 感谢项目
 

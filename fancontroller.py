@@ -1,6 +1,6 @@
 import json
-import threading
 import os
+import threading
 
 from fanController.dell730_controller import Dell730FanController
 
@@ -24,12 +24,13 @@ def main():
     servers = data['servers']
     windows_ipmi_tool_path = data['windows_ipmi_tool_path']
     interval = data['interval']
+    auto = data.get('auto', False)  # 从配置文件中获取 auto 参数，默认为 False
     threads = []
 
     for server in servers:
         if server['type'] == 'dell730':
             # 使用 Dell730FanController 控制器
-            fan_controller = Dell730FanController(servers=server, interval=interval, windows_ipmi_tool_path=windows_ipmi_tool_path,log_file_path=log_file_path)
+            fan_controller = Dell730FanController(servers=server, interval=interval, windows_ipmi_tool_path=windows_ipmi_tool_path, log_file_path=log_file_path, auto=auto)
             # 创建线程并启动风扇控制
             thread = threading.Thread(target=fan_controller.start_fan_control)
             thread.start()
