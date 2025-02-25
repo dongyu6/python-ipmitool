@@ -126,11 +126,11 @@ class IPMIFanController:
         """
         while True:
             cpu_temps = self.get_cpu_temperature()
-            fan_speeds = self.get_fan_rotational_speed()
+            current_fan_speeds = self.get_fan_rotational_speed()
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if cpu_temps:
                 avg_temp = max(cpu_temps)
-                max_speed = max(fan_speeds)
+                max_speed = max(current_fan_speeds)
                 log_message = f"服务器 {self.ip}：CPU 平均温度：{avg_temp}°C, 风扇最大转速{max_speed}"
                 self.logger.info(log_message)  # 使用 logging 记录日志
 
