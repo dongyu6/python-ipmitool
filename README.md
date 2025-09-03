@@ -1,3 +1,5 @@
+[English Readme](./README_EN.md)
+
 # python-ipmitool
 
 根据ipmi来监测服务器的CPU温度并根据预定义的温度区间调整风扇转速
@@ -104,19 +106,84 @@
     }
 
     ```
-4. 启动项目
+5. 启动项目
 
-    1. windows环境直接在命令行输入以下命令即可运行
+    为了方便长期运行，推荐采用后台运行的方式。
 
-        ```
-        python fancontroller.py
-        ```
-    2. linux环境直接在命令行输入以下命令即可运行
+    1. **Windows 环境**
 
+        使用 `start /b` 命令让脚本在后台运行：
         ```
-        python3 fancontroller.py 
+        start /b python fancontroller.py
         ```
-       
+
+    2. **Linux 环境**
+
+        使用 `nohup` 和 `&` 让脚本在后台运行，并确保退出终端后进程不被终止：
+        ```
+        nohup python3 fancontroller.py &
+        ```
+
+### 设置为 systemd 服务 (Linux 推荐)
+
+对于需要稳定可靠运行的Linux服务器，强烈建议将本脚本配置为 systemd 服务，以实现开机自启、进程守护等功能。
+
+1.  **创建服务文件**
+
+    使用文本编辑器（如`nano`或`vim`）创建一个新的服务文件：
+    ```
+    sudo nano /etc/systemd/system/fancontroller.service
+    ```
+
+2.  **粘贴服务配置**
+
+    将以下内容粘贴到文件中。**注意：** 您必须将 `User`、`WorkingDirectory` 和 `ExecStart` 中的路径修改为您服务器上的实际路径。
+
+    ```ini
+    [Unit]
+    Description=Python IPMI Fan Controller
+    After=network.target
+
+    [Service]
+    Type=simple
+    # 如果您使用非root用户运行，请确保该用户有权限执行ipmitool命令
+    User=root
+    # 此处填写项目的绝对路径
+    WorkingDirectory=/path/to/python-ipmitool
+    # 此处填写Python解释器和脚本的绝对路径
+    ExecStart=/usr/bin/python3 /path/to/python-ipmitool/fancontroller.py
+    Restart=always
+    RestartSec=3
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+3.  **重载并启用服务**
+
+    执行以下命令来重载 systemd 配置、启动服务并设置为开机自启。
+
+    ```bash
+    # 重新加载 systemd 配置
+    sudo systemctl daemon-reload
+
+    # 启动服务
+    sudo systemctl start fancontroller.service
+
+    # 检查服务状态，确保没有错误
+    sudo systemctl status fancontroller.service
+
+    # 设置服务开机自启
+    sudo systemctl enable fancontroller.service
+    ```
+
+4.  **查看日志**
+
+    配置为服务后，所有日志（包括错误）都可以通过 `journalctl` 查看：
+    ```bash
+    journalctl -u fancontroller.service -f
+    ```
+
 ## 贡献与反馈
 欢迎提交 Issue 和 Pull Request 来帮助改进项目。如有任何问题或建议，请通过 GitHub Issues 反馈。
 
