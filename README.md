@@ -30,7 +30,9 @@
     ```
     cd python-ipmitool
     ```
-3. 编辑`fan_settings.json`配置文件，其含义如下，需要自己配置ip地址和风扇转速
+3. 复制 `fan_settings.json.template` 文件为 `fan_settings.json`。
+
+4. 编辑新创建的 `fan_settings.json` 配置文件，其含义如下，需要自己配置ip地址和风扇转速
 
     > 注意只能用ip地址，不能用域名
     >
@@ -41,6 +43,7 @@
     {
       "auto": true, // 是否自动控制风扇转速，true为自动控制，false为手动控制
       "interval": 60,  // 控制风扇转速的时间间隔，单位为秒
+      "log_backup_count": 30, // 日志文件保留天数
       "windows_ipmi_tool_path": ".\\ipmitool\\ipmitool.exe",  // Windows 系统下 ipmitool 工具的路径
       "servers": [  // 服务器列表
         {

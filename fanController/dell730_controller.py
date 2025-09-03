@@ -67,10 +67,6 @@ class Dell730FanController(IPMIFanController):
         """启动风扇控制的方法。
         使用self.auto来判断是否自动模式。
         """
-        import os
-        if not os.path.exists(self.log_file_path):
-            os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
-            open(self.log_file_path, 'a').close()
         self.process_server()
 
     def set_ipmi_manual_mode(self):
