@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 class IPMIFanController:
-    def __init__(self, servers, interval, windows_ipmi_tool_path, log_file_path, auto=True):
+    def __init__(self, servers, interval, windows_ipmi_tool_path, logger, auto=True):
         """
         初始化 IPMI 风扇控制器。
 
@@ -13,7 +13,7 @@ class IPMIFanController:
             servers (dict): 包含服务器信息的字典。
             interval (int): 检查 CPU 温度的时间间隔（秒）。
             windows_ipmi_tool_path (str): Windows 平台上 IPMI 工具的路径。
-            log_file_path (str):  日志文件路径。
+            logger (logging.Logger): 配置好的日志记录器实例。
             auto (bool): 是否自动模式，True为自动模式，False为手动模式。
         """
         self.platform_system = platform.system()
@@ -23,19 +23,11 @@ class IPMIFanController:
             self.ipmi_tool_path = 'ipmitool'
         self.interval = interval
         self.servers = servers
-        self.log_file_path = log_file_path
+        self.logger = logger
         self.ip = self.servers['ip']
         self.user = self.servers['user']
         self.password = self.servers['password']
         self.auto = auto
-        # 配置 logging
-        logging.basicConfig(
-            filename=self.log_file_path,  # 指定日志文件路径
-            format='%(asctime)s %(message)s',
-            level=logging.INFO,
-            encoding='utf-8'
-        )
-        self.logger = logging.getLogger(__name__)
 
     def send_command(self, cmd_in):
         """
