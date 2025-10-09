@@ -164,4 +164,5 @@ cython_debug/
 # Custom ignores
 fan_settings.json
 fancontroller.log
+fan_settings.yaml
 logs/

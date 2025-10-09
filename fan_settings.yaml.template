@@ -1,0 +1,84 @@
+# IPMI 风扇控制器配置文件
+
+# 是否自动控制风扇转速，true 为自动控制，false 为手动控制
+auto: true
+
+# 控制风扇转速的时间间隔，单位为秒
+interval: 600
+
+# 日志文件保留天数
+log_backup_count: 30
+
+# Windows 系统下 ipmitool 工具的路径
+windows_ipmi_tool_path: ".\\ipmitool\\ipmitool.exe"
+
+# 告警配置
+alert:
+  # 是否启用邮件告警功能，默认 false 关闭
+  enabled: false
+
+  # 风扇转速异常阈值（RPM），超过此值视为调节失败
+  fan_speed_threshold: 10000
+
+  # 连续调节失败次数阈值，达到此次数后发送告警邮件
+  max_failed_attempts: 3
+
+  # 邮件服务器配置
+  email:
+    # SMTP 服务器地址
+    smtp_server: "smtp.163.com"
+
+    # SMTP 端口（通常 465 为 SSL，587 为 TLS）
+    smtp_port: 587
+
+    # 是否使用 TLS 加密
+    use_tls: true
+
+    # 发件人邮箱
+    sender_email: "your_email@gmail.com"
+
+    # 发件人邮箱密码或应用专用密码
+    sender_password: "your_app_password"
+
+    # 收件人邮箱列表（支持多个收件人）
+    recipient_emails:
+      - "admin@example.com"
+      - "alert@example.com"
+
+# 服务器列表
+servers:
+  - type: dell730                    # 服务器类型
+    ip: "192.168.71.90"              # 服务器 IP 地址。如果脚本与服务器在同一台机器运行，可设置为 "local" 以直接执行本地命令
+    user: root                       # IPMI 用户名
+    password: "123123"               # IPMI 密码
+    temperature_ranges:              # 温度范围与对应的风扇转速
+      - min_temp: 0                  # 区间最低温度（包括）
+        max_temp: 60                 # 区间最高温度（包括）
+        fan_speeds: [20, 20, 20, 20, 20, 20]  # 对应风扇转速的列表，单位为百分比
+      - min_temp: 61
+        max_temp: 80
+        fan_speeds: [25, 25, 25, 25, 25, 25]
+
+  - type: dell730
+    ip: "192.168.71.91"
+    user: root
+    password: "123123"
+    temperature_ranges:
+      - min_temp: 0
+        max_temp: 60
+        fan_speeds: [20, 20, 20, 20, 20, 20]
+      - min_temp: 61
+        max_temp: 80
+        fan_speeds: [25, 25, 25, 25, 25, 25]
+
+  - type: dell730
+    ip: "192.168.71.92"
+    user: root
+    password: "123123"
+    temperature_ranges:
+      - min_temp: 0
+        max_temp: 60
+        fan_speeds: [20, 20, 20, 20, 20, 20]
+      - min_temp: 61
+        max_temp: 80
+        fan_speeds: [25, 25, 25, 25, 25, 25]
